@@ -51,7 +51,7 @@ export const asyncRouterMap = [
       {
         path: '/form',
         redirect: '/form/base-form',
-        hidden: true,
+        // hidden: true,
         component: PageView,
         meta: { title: '表单页', icon: 'form', permission: [ 'form' ] },
         children: [
@@ -151,6 +151,22 @@ export const asyncRouterMap = [
         ]
       },
       {
+        path: '/department',
+        name: 'department',
+        component: PageView,
+        redirect: '/department/departmentList',
+        meta: { title: '部门管理', icon: 'table', permission: [ 'table' ] },
+        children: [
+          {
+            path: '/department/departmentList',
+            name: 'DepartmentListWrapper',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/department/DeptList'),
+            meta: { title: '部门列表', keepAlive: true, permission: [ 'table' ] }
+          }
+        ]
+      },
+      {
         path: '/dictionary',
         name: 'dictionary',
         // hidden: true,
@@ -172,7 +188,7 @@ export const asyncRouterMap = [
       {
         path: '/profile',
         name: 'profile',
-        hidden: true,
+        // hidden: true,
         component: RouteView,
         redirect: '/profile/basic',
         meta: { title: '详情页', icon: 'profile', permission: [ 'profile' ] },
@@ -308,7 +324,7 @@ export const asyncRouterMap = [
       {
         path: '/other',
         name: 'otherPage',
-        hidden: true,
+        // hidden: true,
         component: PageView,
         meta: { title: '其他组件', icon: 'slack', permission: [ 'dashboard' ] },
         redirect: '/other/icon-selector',
