@@ -2,7 +2,8 @@ import { axios } from '@/utils/request'
 import moment from 'moment'
 
 const api = {
-  staff: '/staff/getStaffPage'
+  staffList: '/staff/getStaffPage',
+  addStaff: '/staff/addStaff'
 }
 
 export default api
@@ -14,8 +15,17 @@ export function getStaffList (parameter) {
   }
   
   return axios({
-    url: api.staff,
+    url: api.staffList,
     method: 'get',
     params: serachParam
+  })
+}
+
+export function addStaff (parameter) {
+  debugger
+  return axios({
+    url: api.addStaff,
+    method: 'post',
+    params: parameter
   })
 }

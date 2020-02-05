@@ -2,6 +2,7 @@ import { axios } from '@/utils/request'
 
 const api = {
   dictList: '/dict/dictList',
+  searchDictList: '/dict/searchDictList',
   addDict: '/dict/addDict',
   updateDict: '/dict/updateDict',
   deleteDict: '/dict/deleteDict'
@@ -12,6 +13,14 @@ export default api
 export function getDictList (parameter) {
   return axios({
     url: api.dictList,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function searchDictList (parameter) {
+  return axios({
+    url: api.searchDictList,
     method: 'get',
     params: parameter
   })
