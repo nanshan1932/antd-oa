@@ -55,7 +55,14 @@
 
             <a-col :md="8" :sm="24">
               <a-form-item label="部门">
-                <a-input v-decorator="['title', {rules: []}]" />
+                <a-tree-select
+                    :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
+                    :treeData="treeData"
+                    v-decorator="['deptId', {rules: []}]"
+                    placeholder="请选择"
+                    treeDefaultExpandAll
+                  >
+                </a-tree-select>
               </a-form-item>
             </a-col>
 
@@ -142,9 +149,13 @@
 <script>
 import { addStaff } from '@/api/staff/staff'
 import { searchDictList } from '@/api/dictionary/dictionary'
-
+import { TreeSelect } from 'ant-design-vue'
+import { getDeptTree } from '@/api/dept/department'
 
 export default {
+  components:{ 
+    ATreeSelect:TreeSelect 
+  },
   data () {
     return {
       visible: false,
@@ -153,6 +164,7 @@ export default {
       educationData: [],
       maritalData: [],
       postData: [],
+      treeData: [],
       form: this.$form.createForm(this)
     }
   },
@@ -212,6 +224,10 @@ export default {
                   })
               })
             }
+        })
+
+        getDeptTree().then(res => {
+            this.treeData = res.result
         })
 
     },
