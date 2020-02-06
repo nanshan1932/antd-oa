@@ -100,7 +100,7 @@
             
             <a-col :md="8" :sm="24">
               <a-form-item label="入职日期">
-                <a-date-picker v-decorator="['entryDateStart',{rules: [{required: true}]}]" style="width: 100%" placeholder="请选择日期"/>
+                <a-date-picker v-decorator="['entryDate',{rules: [{required: true}]}]" style="width: 100%" placeholder="请选择日期"/>
               </a-form-item>
             </a-col>
 

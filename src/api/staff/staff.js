@@ -9,20 +9,23 @@ const api = {
 export default api
 
 export function getStaffList (parameter) {
-  let serachParam = parameter;
-  if(parameter.entryDateStart){
-    serachParam.entryDateStart = moment(parameter.entryDateStart).format('YYYY-MM-DD');
-  }
   
+  let serachParam = parameter;
+  if(parameter.entryDate){
+    serachParam.entryDateStart = moment(parameter.entryDate[0]).format('YYYY-MM-DD');
+    serachParam.entryDateEnd = moment(parameter.entryDate[1]).format('YYYY-MM-DD');
+  }
+  //去除起止日期数组
+  const {entryDate, ...param} = serachParam
+  console.log("员工查询参数", param)
   return axios({
     url: api.staffList,
     method: 'get',
-    params: serachParam
+    params: param
   })
 }
 
 export function addStaff (parameter) {
-  debugger
   return axios({
     url: api.addStaff,
     method: 'post',

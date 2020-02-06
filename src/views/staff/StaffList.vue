@@ -10,16 +10,23 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-item label="性别">
-              <a-select v-model="queryParam.sex" v-decorator="['sex',{rules: []}]" placeholder="请选择" initialValue="1">
-                <a-select-option value="1">男</a-select-option>
-                <a-select-option value="2">女</a-select-option>
+              <a-select v-model="queryParam.sex" v-decorator="['sex',{rules: []}]" placeholder="请选择" >
+                <a-select-option v-for="d in sexData" :key="d.value">{{d.text}}</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
           <template v-if="advanced">
             <a-col :md="8" :sm="24">
               <a-form-item label="部门">
-                <a-input-number v-model="queryParam.deptId" v-decorator="['deptId',{rules: []}]" style="width: 100%"/>
+                <a-tree-select
+                    :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
+                    :treeData="treeData"
+                    v-model="queryParam.deptId" 
+                    v-decorator="['deptId',{rules: []}]"
+                    placeholder="请选择"
+                    treeDefaultExpandAll
+                  >
+                </a-tree-select>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -28,13 +35,8 @@
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="入职日期">
-                <a-date-picker v-model="queryParam.entryDateStart" v-decorator="['entryDateStart',{rules: []}]" style="width: 100%" placeholder="请输入更新日期"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="8" :sm="24">
               <a-form-item label="是否缴纳社保">
-                <a-select v-model="queryParam.ssFlag" v-decorator="['ssFlag',{rules: []}]" placeholder="请选择" initialValue="0">
+                <a-select v-model="queryParam.ssFlag" v-decorator="['ssFlag',{rules: []}]" placeholder="请选择" >
                   <a-select-option value="1">是</a-select-option>
                   <a-select-option value="2">否</a-select-option>
                 </a-select>
@@ -42,10 +44,12 @@
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="职称">
-                <a-select v-model="queryParam.title" v-decorator="['title',{rules: []}]" placeholder="请选择" initialValue="0">
-                  <a-select-option value="1">医生</a-select-option>
-                  <a-select-option value="2">主任医生</a-select-option>
-                </a-select>
+                <a-input v-model="queryParam.title" v-decorator="['title',{rules: []}]" placeholder=""/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="10" :sm="24">
+              <a-form-item label="入职日期">
+                <a-range-picker v-model="queryParam.entryDate" v-decorator="['entryDate',{rules: []}]" style="width: 100%" />
               </a-form-item>
             </a-col>
           </template>
@@ -118,6 +122,9 @@ import { STable, Ellipsis } from '@/components'
 import StepByStepModal from '../list/modules/StepByStepModal'
 import StaffForm from './modules/StaffForm'
 import { getStaffList } from '@/api/staff/staff'
+import { searchDictList } from '@/api/dictionary/dictionary'
+import { TreeSelect } from 'ant-design-vue'
+import { getDeptTree } from '@/api/dept/department'
 
 const statusMap = {
   0: {
@@ -144,6 +151,7 @@ export default {
     STable,
     Ellipsis,
     StaffForm,
+    ATreeSelect : TreeSelect,
     StepByStepModal
   },
   data () {
@@ -261,6 +269,8 @@ export default {
       },
       selectedRowKeys: [],
       selectedRows: [],
+      sexData: [],
+      treeData: [],
 
       // custom table alert & rowSelection
       options: {
@@ -282,35 +292,27 @@ export default {
     }
   },
   created () {
-    // this.tableOption()
-    // getRoleList({ t: new Date() })
+    this.initSearchFilter();
   },
   methods: {
-    tableOption () {
-      if (!this.optionAlertShow) {
-        this.options = {
-          alert: { show: true, clear: () => { this.selectedRowKeys = [] } },
-          rowSelection: {
-            selectedRowKeys: this.selectedRowKeys,
-            onChange: this.onSelectChange,
-            getCheckboxProps: record => ({
-              props: {
-                disabled: record.no === 'No 2', // Column configuration not to be checked
-                name: record.no
-              }
-            })
-          }
-        }
-        this.optionAlertShow = true
-      } else {
-        this.options = {
-          alert: false,
-          rowSelection: null
-        }
-        this.optionAlertShow = false
-      }
-    },
+    initSearchFilter(){
+        const that = this
+        //性别
+        searchDictList({type:1001}).then(res => {
+            if(Array.isArray(res) && res.length > 0){
+              res.forEach(function (value,index) {
+                  that.sexData.push({
+                    value: value.code,
+                    text: value.name
+                  })
+              })
+            }
+        })
 
+        getDeptTree().then(res => {
+            this.treeData = res.result
+        })
+    },
     handleEdit (record) {
       console.log(record)
       this.$refs.modal.edit(record)
