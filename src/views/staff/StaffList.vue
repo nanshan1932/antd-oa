@@ -5,12 +5,12 @@
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
             <a-form-item label="姓名">
-              <a-input v-model="queryParam.name" v-decorator="['name',{rules: []}]" placeholder=""/>
+              <a-input v-model="queryParam.name"  placeholder=""/>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-item label="性别">
-              <a-select v-model="queryParam.sex" v-decorator="['sex',{rules: []}]" placeholder="请选择" >
+              <a-select v-model="queryParam.sex" placeholder="请选择" >
                 <a-select-option v-for="d in sexData" :key="d.value">{{d.text}}</a-select-option>
               </a-select>
             </a-form-item>
@@ -22,7 +22,6 @@
                     :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
                     :treeData="treeData"
                     v-model="queryParam.deptId" 
-                    v-decorator="['deptId',{rules: []}]"
                     placeholder="请选择"
                     treeDefaultExpandAll
                   >
@@ -31,12 +30,12 @@
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="生日">
-                <a-input-number v-model="queryParam.birthDay" v-decorator="['birthDay',{rules: []}]" style="width: 100%"/>
+                <a-input-number v-model="queryParam.birthDay" style="width: 100%"/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="是否缴纳社保">
-                <a-select v-model="queryParam.ssFlag" v-decorator="['ssFlag',{rules: []}]" placeholder="请选择" >
+                <a-select v-model="queryParam.ssFlag" placeholder="请选择" >
                   <a-select-option value="1">是</a-select-option>
                   <a-select-option value="2">否</a-select-option>
                 </a-select>
@@ -44,12 +43,12 @@
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="职称">
-                <a-input v-model="queryParam.title" v-decorator="['title',{rules: []}]" placeholder=""/>
+                <a-input v-model="queryParam.title" placeholder=""/>
               </a-form-item>
             </a-col>
             <a-col :md="10" :sm="24">
               <a-form-item label="入职日期">
-                <a-range-picker v-model="queryParam.entryDate" v-decorator="['entryDate',{rules: []}]" style="width: 100%" />
+                <a-range-picker v-model="queryParam.entryDate" style="width: 100%" />
               </a-form-item>
             </a-col>
           </template>
@@ -174,7 +173,7 @@ export default {
         },
         {
           title: '性别',
-          dataIndex: 'sex',
+          dataIndex: 'sexTxt',
           scopedSlots: { customRender: 'sex' }
         },
         {
@@ -183,7 +182,7 @@ export default {
         },
         {
           title: '学历',
-          dataIndex: 'education'
+          dataIndex: 'educationTxt'
         },
         {
           title: '民族',
@@ -191,15 +190,15 @@ export default {
         },
         {
           title: '婚姻状况',
-          dataIndex: 'maritalStatus'
+          dataIndex: 'maritalStatusTxt'
         },
         {
           title: '部门',
-          dataIndex: 'deptId'
+          dataIndex: 'department'
         },
         {
           title: '岗位',
-          dataIndex: 'post',
+          dataIndex: 'postTxt',
           scopedSlots: { customRender: 'post' }
         },
         {
