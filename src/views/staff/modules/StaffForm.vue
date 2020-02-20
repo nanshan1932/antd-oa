@@ -139,6 +139,13 @@
                 <a-input v-decorator="['contractPeriod', {rules: []}]" />
               </a-form-item>
             </a-col>
+            <a-col :md="8" :sm="24">
+              <a-form-item label="是否缴纳社保">
+                <a-select  v-decorator="['ssFlag', {rules: []}]" placeholder="请选择">
+                  <a-select-option v-for="d in ssData" :key="d.value">{{d.text}}</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
         </a-row>
       </a-form>
     </a-spin>
@@ -160,11 +167,13 @@ export default {
     return {
       visible: false,
       confirmLoading: false,
+      ssData: [{'value': 1, 'text':'是'},{'value': 2, 'text':'否'}], 
       sexData: [],
       educationData: [],
       maritalData: [],
       postData: [],
       treeData: [],
+      formId: {},
       form: this.$form.createForm(this)
     }
   },
@@ -175,6 +184,14 @@ export default {
   methods: {
     add () {
       this.visible = true
+    },
+    edit(record) {
+      this.visible = true
+      let {id, ...editRecord} = record
+      this.formId = {id: record.id}
+      this.$nextTick(() => {
+        this.form.setFieldsValue({ ...editRecord })
+      });
     },
     initFormData(){
         const that = this

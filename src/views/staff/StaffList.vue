@@ -67,7 +67,7 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="$refs.createModal.add()">新建</a-button>
+      <a-button type="primary" icon="plus" @click="$refs.staffFormModal.add()">新建</a-button>
       <!-- <a-button type="dashed" @click="tableOption">{{ optionAlertShow && '关闭' || '开启' }} alert</a-button> -->
       <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
@@ -95,30 +95,22 @@
       <span slot="serial" slot-scope="text, record, index">
         {{ index + 1 }}
       </span>
-      <span slot="status" slot-scope="text">
-        <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
-      </span>
-      <span slot="description" slot-scope="text">
-        <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
-      </span>
-
+      
       <span slot="action" slot-scope="text, record">
         <template>
-          <a @click="handleEdit(record)">配置</a>
+          <a @click="handleEdit(record)">修改</a>
           <a-divider type="vertical" />
-          <a @click="handleSub(record)">订阅报警</a>
+          <a @click="handleSub(record)">报警</a>
         </template>
       </span>
     </s-table>
-    <staff-form ref="createModal" @ok="handleOk" />
-    <step-by-step-modal ref="modal" @ok="handleOk"/>
+    <staff-form ref="staffFormModal" @ok="handleOk" />
   </a-card>
 </template>
 
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import StepByStepModal from '../list/modules/StepByStepModal'
 import StaffForm from './modules/StaffForm'
 import { getStaffList } from '@/api/staff/staff'
 import { searchDictList } from '@/api/dictionary/dictionary'
@@ -150,8 +142,7 @@ export default {
     STable,
     Ellipsis,
     StaffForm,
-    ATreeSelect : TreeSelect,
-    StepByStepModal
+    ATreeSelect : TreeSelect
   },
   data () {
     return {
@@ -203,8 +194,7 @@ export default {
         },
         {
           title: '职称',
-          dataIndex: 'title',
-          sorter: true
+          dataIndex: 'title'
         },
         {
           title: '毕业院校',
@@ -248,7 +238,7 @@ export default {
         },
         {
           title: '社保',
-          dataIndex: 'ssId'
+          dataIndex: 'ssFlagTxt'
         },
         {
           title: '操作',
@@ -314,7 +304,7 @@ export default {
     },
     handleEdit (record) {
       console.log(record)
-      this.$refs.modal.edit(record)
+      this.$refs.staffFormModal.edit(record)
     },
     handleSub (record) {
       if (record.status !== 0) {
@@ -324,6 +314,7 @@ export default {
       }
     },
     handleOk () {
+      debugger
       this.$refs.table.refresh()
     },
     onSelectChange (selectedRowKeys, selectedRows) {
