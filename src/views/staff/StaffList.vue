@@ -111,7 +111,7 @@
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import StaffForm from './modules/StaffForm1'
+import StaffForm from './modules/StaffForm'
 import { getStaffList } from '@/api/staff/staff'
 import { searchDictList } from '@/api/dictionary/dictionary'
 import { TreeSelect } from 'ant-design-vue'
