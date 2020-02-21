@@ -3,7 +3,8 @@ import moment from 'moment'
 
 const api = {
   staffList: '/staff/getStaffPage',
-  addStaff: '/staff/addStaff'
+  addStaff: '/staff/addStaff',
+  editStaff: '/staff/updateStaff'
 }
 
 export default api
@@ -26,9 +27,30 @@ export function getStaffList (parameter) {
 }
 
 export function addStaff (parameter) {
+  let saveParam = parameter;
+  if(parameter.entryDateMoment){
+    saveParam.entryDate = moment(parameter.entryDateMoment).format('YYYY-MM-DD')
+  }
+  //去除入职日期
+  const {entryDateMoment, ...toSaveparam} = saveParam
   return axios({
     url: api.addStaff,
     method: 'post',
-    params: parameter
+    params: toSaveparam
+  })
+}
+
+export function editStaff (parameter) {
+  let editParam = parameter;
+  if(parameter.entryDateMoment){
+    editParam.entryDate = moment(parameter.entryDateMoment).format('YYYY-MM-DD')
+  }
+  //去除入职日期
+  const {entryDateMoment, ...toEditParams} = editParam
+  console.log("toEditParams:", toEditParams)
+  return axios({
+    url: api.editStaff,
+    method: 'post',
+    params: toEditParams
   })
 }

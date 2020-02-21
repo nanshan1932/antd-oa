@@ -100,7 +100,7 @@
             
             <a-col :md="8" :sm="24">
               <a-form-item label="入职日期">
-                <a-date-picker v-decorator="['entryDate',{rules: [{required: true}]}]" style="width: 100%" placeholder="请选择日期"/>
+                <a-date-picker v-decorator="['entryDateMoment',{rules: [{required: true}]}]" style="width: 100%" placeholder="请选择日期"/>
               </a-form-item>
             </a-col>
 
@@ -154,7 +154,7 @@
 </template>
 
 <script>
-import { addStaff } from '@/api/staff/staff'
+import { addStaff, editStaff } from '@/api/staff/staff'
 import { searchDictList } from '@/api/dictionary/dictionary'
 import { TreeSelect } from 'ant-design-vue'
 import { getDeptTree } from '@/api/dept/department'
@@ -168,7 +168,7 @@ export default {
     return {
       visible: false,
       confirmLoading: false,
-      ssData: [{'value': 1, 'text':'是'},{'value': 2, 'text':'否'}], 
+      ssData: [], 
       sexData: [],
       educationData: [],
       maritalData: [],
@@ -185,6 +185,8 @@ export default {
   methods: {
     add () {
       this.visible = true
+      this.formId = {}
+      this.form.resetFields()
     },
     edit(record) {
       this.visible = true
@@ -204,7 +206,7 @@ export default {
         birthDay: record.birthDay,
         registeredPermanentResidence: record.registeredPermanentResidence,
         address: record.address,
-        entryDate: moment(record.entryDate, "YYYY-MM-DD"),
+        entryDateMoment: moment(record.entryDate, "YYYY-MM-DD"),
         // resignationDate: record.resignationDate,
         telNumber: record.telNumber,
         contactPerson: record.contactPerson,
@@ -219,6 +221,17 @@ export default {
     },
     initFormData(){
         const that = this
+        //是否缴纳社保
+        searchDictList({type:1000}).then(res => {
+            if(Array.isArray(res) && res.length > 0){
+              res.forEach(function (value,index) {
+                  that.ssData.push({
+                    value: value.code,
+                    text: value.name
+                  })
+              })
+            }
+        })
         //性别
         searchDictList({type:1001}).then(res => {
             if(Array.isArray(res) && res.length > 0){
@@ -277,17 +290,30 @@ export default {
       this.confirmLoading = true
       validateFields((errors, values) => {
         if (!errors) {
-          console.log('values', values)
-          addStaff(Object.assign(values)).then(res => {
-              this.visible = false
-              this.confirmLoading = false
-              this.$emit('ok', values)
-          }).catch(error => {
-              console.log(error)
-          }).finally(()=>{
-              this.visible = false
-              this.confirmLoading = false
-          })
+          if(this.formId.id){
+              editStaff(Object.assign(values, this.formId)).then(res => {
+                this.visible = false
+                this.confirmLoading = false
+                this.$emit('ok', values)
+              }).catch(error => {
+                console.log(error)
+              }).finally(()=>{
+                this.visible = false
+                this.confirmLoading = false
+              })
+          }else{
+             addStaff(Object.assign(values)).then(res => {
+                this.visible = false
+                this.confirmLoading = false
+                this.$emit('ok', values)
+             }).catch(error => {
+                console.log(error)
+             }).finally(()=>{
+                this.visible = false
+                this.confirmLoading = false
+             })
+          }
+          
         } else {
           this.confirmLoading = false
         }
