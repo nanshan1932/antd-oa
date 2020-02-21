@@ -158,6 +158,7 @@ import { addStaff } from '@/api/staff/staff'
 import { searchDictList } from '@/api/dictionary/dictionary'
 import { TreeSelect } from 'ant-design-vue'
 import { getDeptTree } from '@/api/dept/department'
+import moment from 'moment'
 
 export default {
   components:{ 
@@ -187,10 +188,33 @@ export default {
     },
     edit(record) {
       this.visible = true
-      let {id, ...editRecord} = record
+      console.log('参数为',record)
+      const formData = {
+        name: record.name,
+        sex: record.sex,
+        idNumber: record.idNumber,
+        education: record.education,
+        ethnicity: record.ethnicity,
+        maritalStatus: record.maritalStatus,
+        deptId: record.deptId + '',
+        post: record.post,
+        title: record.title,
+        graduateInstitution: record.graduateInstitution,
+        major: record.major,
+        birthDay: record.birthDay,
+        registeredPermanentResidence: record.registeredPermanentResidence,
+        address: record.address,
+        entryDate: moment(record.entryDate, "YYYY-MM-DD"),
+        // resignationDate: record.resignationDate,
+        telNumber: record.telNumber,
+        contactPerson: record.contactPerson,
+        contactPersonTel: record.contactPersonTel,
+        contractPeriod: record.contractPeriod,
+        ssFlag: record.ssFlag
+      }
       this.formId = {id: record.id}
       this.$nextTick(() => {
-        this.form.setFieldsValue({ ...editRecord })
+        this.form.setFieldsValue(formData)
       });
     },
     initFormData(){

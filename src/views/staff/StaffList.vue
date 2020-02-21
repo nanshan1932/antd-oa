@@ -233,6 +233,10 @@ export default {
           dataIndex: 'contactPerson'
         },
         {
+          title: '紧急联系人电话',
+          dataIndex: 'contactPersonTel'
+        },
+        {
           title: '合同期限',
           dataIndex: 'contractPeriod'
         },
