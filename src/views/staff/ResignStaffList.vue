@@ -230,13 +230,13 @@ export default {
           title: '社保',
           dataIndex: 'ssFlagTxt'
         },
-        {
-          title: '操作',
-          dataIndex: 'action',
-          fixed: 'right',
-          width: '150px',
-          scopedSlots: { customRender: 'action' }
-        }
+        // {
+        //   title: '操作',
+        //   dataIndex: 'action',
+        //   fixed: 'right',
+        //   width: '150px',
+        //   scopedSlots: { customRender: 'action' }
+        // }
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
