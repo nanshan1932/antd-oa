@@ -47,8 +47,8 @@
               </a-form-item>
             </a-col>
             <a-col :md="10" :sm="24">
-              <a-form-item label="入职日期">
-                <a-range-picker v-model="queryParam.entryDate" style="width: 100%" />
+              <a-form-item label="离职日期">
+                <a-range-picker v-model="queryParam.resignationDate" style="width: 100%" />
               </a-form-item>
             </a-col>
           </template>
@@ -66,21 +66,6 @@
       </a-form>
     </div>
 
-    <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="$refs.staffFormModal.add()">新建</a-button>
-      <!-- <a-button type="dashed" @click="tableOption">{{ optionAlertShow && '关闭' || '开启' }} alert</a-button> -->
-      <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
-        <a-menu slot="overlay">
-          <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
-          <!-- lock | unlock -->
-          <a-menu-item key="2"><a-icon type="lock" />锁定</a-menu-item>
-        </a-menu>
-        <a-button style="margin-left: 8px">
-          批量操作 <a-icon type="down" />
-        </a-button>
-      </a-dropdown>
-    </div>
-
     <s-table
       ref="table"
       size="default"
@@ -95,7 +80,7 @@
       <span slot="serial" slot-scope="text, record, index">
         {{ index + 1 }}
       </span>
-      
+      <!--
       <span slot="action" slot-scope="text, record">
         <template>
           <a @click="handleEdit(record)">修改</a>
@@ -103,9 +88,9 @@
           <a @click="handleResignation(record)">离职</a>
         </template>
       </span>
+      -->
     </s-table>
     <staff-form ref="staffFormModal" @ok="handleOk" />
-    <resignation-modal ref="resignationModal" @ok="handleOk" />
   </a-card>
 </template>
 
@@ -113,8 +98,7 @@
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 import StaffForm from './modules/StaffForm'
-import ResignationModal from './modules/ResignationModal'
-import { getStaffOnJobPage } from '@/api/staff/staff'
+import { getResignStaffPage } from '@/api/staff/staff'
 import { searchDictList } from '@/api/dictionary/dictionary'
 import { TreeSelect } from 'ant-design-vue'
 import { getDeptTree } from '@/api/dept/department'
@@ -144,7 +128,6 @@ export default {
     STable,
     Ellipsis,
     StaffForm,
-    ResignationModal,
     ATreeSelect : TreeSelect
   },
   data () {
@@ -258,7 +241,7 @@ export default {
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         console.log('loadData.parameter', parameter)
-        return getStaffOnJobPage(Object.assign(parameter, this.queryParam))
+        return getResignStaffPage(Object.assign(parameter, this.queryParam))
           .then(res => {
             return res.result
           })
@@ -314,7 +297,7 @@ export default {
       this.$refs.staffFormModal.edit(record)
     },
     handleResignation (record) {
-      this.$refs.resignationModal.edit(record)
+    //   this.$refs.resignationModal.edit(record)
     },
     handleOk () {
       debugger

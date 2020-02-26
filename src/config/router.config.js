@@ -148,6 +148,13 @@ export const asyncRouterMap = [
             component: () => import('@/views/staff/StaffList'),
             meta: { title: '员工列表', keepAlive: true, permission: [ 'table' ] }
           },
+          {
+            path: '/staff/resignationList/:pageNo([1-9]\\d*)?',
+            name: 'ResignationStaffWrapper',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/staff/ResignStaffList'),
+            meta: { title: '离职员工', keepAlive: true, permission: [ 'table' ] }
+          },
         ]
       },
       {
